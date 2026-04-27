@@ -14,7 +14,6 @@
             const wrapper = document.getElementById('photo-wrapper');
             const inputs = wrapper.querySelectorAll('.photo-input');
 
-            // cek apakah semua input sudah terisi
             const allFilled = Array.from(inputs).every(input => input.value !== '');
 
             if (allFilled && inputs.length < 3) {
@@ -44,7 +43,6 @@
         const wrapper = document.getElementById('photo-wrapper');
         const inputs = wrapper.querySelectorAll('.input-group');
 
-        // minimal 1 input harus ada
         if (inputs.length <= 1) {
             alert("Minimal 1 foto");
             return;
@@ -73,7 +71,6 @@
         <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
-            <!-- Info ID otomatis -->
             <div class="mb-3">
                 <label class="form-label">ID Product</label>
                 <input type="text" class="form-control" value="Otomatis dibuat berdasarkan brand" disabled>

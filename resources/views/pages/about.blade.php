@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About us</title>
 </head>
+
 <body>
-     @extends('layout.app')
-      @section('content')
-          <h1> About Us </h1>
-     @endsection
+    @extends('layouts.guest')
+    @section('content')
+        <h1> About Us </h1>
+    @endsection
 </body>
+
 </html>
