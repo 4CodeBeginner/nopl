@@ -31,7 +31,6 @@ class ProductController extends Controller
             'photos'       => 'required',
         ]);
 
-        // Mapping prefix
         $prefixMap = [
             'hotw'   => 'HW',
             'minigt' => 'MGT',
@@ -48,7 +47,6 @@ class ProductController extends Controller
 
         $generatedId = $prefix . '-' . $number . '-' . $date;
 
-        // Pastikan folder ada
         if (!file_exists(public_path('produk'))) {
             mkdir(public_path('produk'), 0777, true);
         }
