@@ -7,6 +7,7 @@
     <link rel="stylesheet" href ="css/style.css">
 </head>
 <body>
+
     @extends('layout.app')
       @section('content')
           <div style="display: flex; gap: 20px; flex-wrap: wrap;">
@@ -20,7 +21,6 @@
         
     </div>
      @endsection
-
 
 </body>
 </html>

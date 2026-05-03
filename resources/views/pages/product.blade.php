@@ -10,8 +10,26 @@
     @extends('layout.app')
     @section('content')
 
-  <h1> product </h1>
-    @endsection
+
+    <div class="product-container">
+
+        <div class="product-grid">
+            @foreach ($products as $product)
+                @php
+                    $photos = explode(',', $product->photo);
+                    $firstPhoto = $photos[0] ?? null;
+                @endphp
+
+                <x-product-card
+                    :image="$firstPhoto"
+                    :name="$product->name_product"
+                    :brand="$product->brand"
+                    :price="0"
+
+                    />
+                    @endforeach
+</div>
+
 
 </body>
 </html>
