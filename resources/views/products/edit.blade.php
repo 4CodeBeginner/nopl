@@ -80,6 +80,13 @@
                         </select>
                     </div>
 
+                    <!-- QTY -->
+                    <div class="mb-3">
+                        <label class="form-label">Quantity</label>
+                        <input type="number" name="qty" class="form-control" value="{{ $product->qty }}" min="0"
+                            required>
+                    </div>
+
                     <div class="mb-3">
                         <label class="form-label">Deskripsi</label>
                         <textarea name="description" class="form-control" rows="3" required>{{ $product->description }}</textarea>
@@ -109,12 +116,14 @@
                         </div>
                     </div>
 
+                    <!-- TAMBAH FOTO -->
                     <div class="mb-3">
                         <label class="form-label">Tambah Foto (min 1, max 3)</label>
 
                         <div id="photo-wrapper">
                             <div class="input-group mb-2">
-                                <input type="file" name="photos[]" class="form-control photo-input" accept="image/*">
+                                <input type="file" name="photos[]" class="form-control photo-input" accept="image/*"
+                                    onclick="handleClick(this)">
                                 <button type="button" class="btn btn-danger" onclick="removeInput(this)">🗑</button>
                             </div>
                         </div>
@@ -151,6 +160,12 @@
         document.addEventListener("change", function(e) {
             if (e.target.classList.contains("photo-input")) {
 
+                if (getTotal() > 3) {
+                    e.target.value = "";
+                    alert("Maksimal 3 foto");
+                    return;
+                }
+
                 const inputs = document.querySelectorAll('.photo-input');
                 const allFilled = Array.from(inputs).every(input => input.value !== '');
 
@@ -169,7 +184,7 @@
             div.classList.add("input-group", "mb-2");
 
             div.innerHTML = `
-            <input type="file" name="photos[]" class="form-control photo-input" accept="image/*">
+            <input type="file" name="photos[]" class="form-control photo-input" accept="image/*" onclick="handleClick(this)">
             <button type="button" class="btn btn-danger" onclick="removeInput(this)">🗑</button>
         `;
 
@@ -194,23 +209,12 @@
             btn.parentElement.remove();
         }
 
-        document.addEventListener("change", function(e) {
-            if (e.target.classList.contains("photo-input")) {
-
-                if (getTotal() > 3) {
-                    e.target.value = "";
-                    alert("Maksimal 3 foto");
-                    return;
-                }
-
-                const inputs = document.querySelectorAll('.photo-input');
-                const allFilled = Array.from(inputs).every(input => input.value !== '');
-
-                if (allFilled && getTotal() < 3) {
-                    addInput();
-                }
+        function handleClick(input) {
+            if (getTotal() >= 3 && input.value === '') {
+                alert("Maksimal 3 foto");
+                input.blur();
             }
-        });
+        }
     </script>
 
 @endsection

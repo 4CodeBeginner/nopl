@@ -33,6 +33,7 @@ class ProductController extends Controller
         $request->validate([
             'name_product' => 'required',
             'brand'        => 'required',
+            'qty'          => 'required|integer|min:0',
             'description'  => 'required',
             'link'         => 'required',
             'photos'       => 'required',
@@ -78,6 +79,7 @@ class ProductController extends Controller
             'id_product'   => $generatedId,
             'name_product' => $request->name_product,
             'brand'        => $request->brand,
+            'qty'          => $request->qty,
             'description'  => $request->description,
             'link'         => $request->link,
             'photo'        => implode(',', $paths)
@@ -104,6 +106,7 @@ class ProductController extends Controller
 
         $request->validate([
             'name_product' => 'required|string|max:255',
+            'qty'          => 'required|integer|min:0',
             'brand'        => 'required|in:hotw,minigt,poprace,tomica,mbx',
             'description'  => 'required|string',
             'link'         => 'required|url',
@@ -148,6 +151,7 @@ class ProductController extends Controller
         $product->update([
             'name_product' => $request->name_product,
             'brand'        => $request->brand,
+            'qty'          => $request->qty,
             'description'  => $request->description,
             'link'         => $request->link,
             'photo'        => implode(',', $paths)

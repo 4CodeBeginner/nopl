@@ -103,6 +103,7 @@
                                 <th>No</th>
                                 <th>ID Product</th>
                                 <th>Nama</th>
+                                <th>Qty</th>
                                 <th>Link</th>
                                 <th width="220px">Aksi</th>
                             </tr>
@@ -118,6 +119,12 @@
 
                                     <td class="fw-semibold">
                                         {{ $product->name_product }}
+                                    </td>
+
+                                    <td class="text-center">
+                                        <span class="badge bg-success">
+                                            {{ $product->qty }}
+                                        </span>
                                     </td>
 
                                     <td class="text-center">
