@@ -18,7 +18,43 @@
 
             .table th,
             .table td {
+                text-align: center;
                 vertical-align: middle;
+            }
+
+            .name-ellipsis {
+                max-width: 180px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .price-wrap {
+                display: flex;
+                justify-content: center;
+                gap: 6px;
+            }
+
+            .currency {
+                width: 25px;
+                text-align: right;
+                font-weight: 600;
+            }
+
+            .amount {
+                min-width: 90px;
+                text-align: left;
+                font-family: monospace;
+                font-weight: 600;
+            }
+
+            .qty-badge {
+                display: inline-block;
+                min-width: 45px;
+                text-align: center;
+                font-weight: 600;
+                padding: 5px 10px;
+                border-radius: 8px;
             }
 
             .btn-sm {
@@ -104,6 +140,7 @@
                                 <th>ID Product</th>
                                 <th>Nama</th>
                                 <th>Qty</th>
+                                <th>Harga</th>
                                 <th>Link</th>
                                 <th width="220px">Aksi</th>
                             </tr>
@@ -117,21 +154,34 @@
                                         {{ $product->id_product }}
                                     </td>
 
-                                    <td class="fw-semibold">
+                                    <td class="fw-semibold name-ellipsis" title="{{ $product->name_product }}">
                                         {{ $product->name_product }}
                                     </td>
 
-                                    <td class="text-center">
-                                        <span class="badge bg-success">
+                                    <td>
+                                        <span
+                                            class="badge qty-badge
+                                            {{ $product->qty == 0 ? 'bg-danger' : ($product->qty < 5 ? 'bg-warning text-dark' : 'bg-success') }}">
                                             {{ $product->qty }}
                                         </span>
                                     </td>
 
-                                    <td class="text-center">
-                                        <a href="{{ $product->link }}" target="_blank"
-                                            class="btn btn-sm btn-info text-white shadow-sm">
-                                            Lihat
-                                        </a>
+                                    <td>
+                                        <div class="price-wrap">
+                                            <span class="currency">Rp</span>
+                                            <span class="amount">
+                                                {{ number_format($product->price, 0, ',', '.') }}
+                                            </span>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="d-flex justify-content-center">
+                                            <a href="{{ $product->link }}" target="_blank"
+                                                class="btn btn-sm btn-info text-white shadow-sm">
+                                                Lihat
+                                            </a>
+                                        </div>
                                     </td>
 
                                     <td class="text-center">
@@ -208,12 +258,39 @@
                                                 </div>
 
                                                 <!-- DETAIL -->
-                                                <p><strong>ID:</strong> {{ $product->id_product }}</p>
+                                                <div class="mt-3">
 
-                                                <p class="mb-1"><strong>Deskripsi:</strong></p>
+                                                    <p><strong>ID Product:</strong><br>
+                                                        {{ $product->id_product }}
+                                                    </p>
 
-                                                <div class="desc-box">
-                                                    {!! nl2br(e($product->description)) !!}
+                                                    <p><strong>Nama:</strong><br>
+                                                        {{ $product->name_product }}
+                                                    </p>
+
+                                                    <p><strong>Brand:</strong><br>
+                                                        {{ strtoupper($product->brand) }}
+                                                    </p>
+
+                                                    <p><strong>Quantity:</strong><br>
+                                                        {{ $product->qty }}
+                                                    </p>
+
+                                                    <p><strong>Harga:</strong><br>
+                                                        Rp {{ number_format($product->price, 0, ',', '.') }}
+                                                    </p>
+
+                                                    <p><strong>Link:</strong><br>
+                                                        <a href="{{ $product->link }}" target="_blank">
+                                                            {{ $product->link }}
+                                                        </a>
+                                                    </p>
+
+                                                    <p class="mb-1"><strong>Deskripsi:</strong></p>
+                                                    <div class="desc-box">
+                                                        {!! nl2br(e($product->description)) !!}
+                                                    </div>
+
                                                 </div>
 
                                             </div>

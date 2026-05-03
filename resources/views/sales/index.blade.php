@@ -2,101 +2,145 @@
 
 @section('content')
 
-<style>
-    .card {
-        border-radius: 12px;
-        border: none;
-    }
+    <style>
+        .card {
+            border-radius: 14px;
+            border: none;
+        }
 
-    .table th,
-    .table td {
-        vertical-align: middle;
-    }
+        .table {
+            border: 1px solid #dee2e6;
+        }
 
-    .btn-sm {
-        border-radius: 8px;
-    }
-</style>
+        .table th,
+        .table td {
+            vertical-align: middle;
+            text-align: center;
+            border: 1px solid #dee2e6;
+        }
 
-<div class="d-flex justify-content-between mb-3">
-    <a href="{{ route('sales.create') }}" class="btn btn-primary shadow-sm">
-        + Tambah Penjualan
-    </a>
-</div>
+        .table thead th {
+            background-color: #212529;
+            color: #fff;
+        }
 
-@if(session('success'))
-<div class="alert alert-success shadow-sm">
-    {{ session('success') }}
-</div>
-@endif
+        .btn-sm {
+            border-radius: 8px;
+        }
 
-<div class="card shadow-sm">
-    <div class="card-body">
+        .price-col {
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+            font-weight: 500;
+        }
 
-        <div class="table-responsive">
-            <table class="table table-hover align-middle">
-                <thead class="table-dark text-center">
-                    <tr>
-                        <th>No</th>
-                        <th>Tanggal</th>
-                        <th>Customer</th>
-                        <th>Total</th>
-                        <th width="200px">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
+        .customer-name {
+            font-weight: 600;
+        }
 
-                    @forelse($sales as $i => $sale)
-                    <tr>
-                        <td class="text-center fw-semibold">{{ $i+1 }}</td>
-                        <td>{{ $sale->sale_date }}</td>
-                        <td>{{ $sale->customer_name }}</td>
-                        <td class="fw-semibold">Rp {{ number_format($sale->total_amount) }}</td>
+        .resi {
+            font-size: 13px;
+            color: #888;
+        }
 
-                        <td class="text-center">
+        .nested-table {
+            border: 1px solid #dee2e6;
+            background: #fbfbfb;
+            border-radius: 10px;
+            overflow: hidden;
+        }
 
-                            <!-- DETAIL MODAL BUTTON -->
-                            <button class="btn btn-sm btn-info text-white shadow-sm"
-                                data-bs-toggle="modal"
-                                data-bs-target="#detailModal{{ $sale->id }}">
-                                Detail
-                            </button>
+        .nested-table th,
+        .nested-table td {
+            font-size: 13px;
+            padding: 6px;
+            border: 1px solid #dee2e6;
+        }
 
-                            <!-- DELETE -->
-                            <form action="{{ route('sales.destroy',$sale->id) }}" method="POST" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button onclick="return confirm('Hapus data?')"
-                                    class="btn btn-sm btn-danger shadow-sm">
-                                    Hapus
-                                </button>
-                            </form>
+        .nested-table th {
+            background: #f1f3f5;
+        }
 
-                        </td>
-                    </tr>
+        .qty-text {
+            font-weight: 500;
+            color: #333;
+        }
 
-                    <!-- MODAL DETAIL -->
-                    <div class="modal fade" id="detailModal{{ $sale->id }}">
-                        <div class="modal-dialog modal-lg modal-dialog-centered">
-                            <div class="modal-content">
+        .total-text {
+            font-weight: 600;
+            color: #198754;
+        }
+    </style>
 
-                                <div class="modal-header">
-                                    <h5 class="modal-title">
-                                        Detail Penjualan
-                                    </h5>
-                                    <button class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-semibold">Data Penjualan</h4>
 
-                                <div class="modal-body">
+        <a href="{{ route('sales.create') }}" class="btn btn-primary shadow-sm">
+            + Tambah Penjualan
+        </a>
+    </div>
 
-                                    <p><strong>Customer:</strong> {{ $sale->customer_name }}</p>
-                                    <p><strong>Tanggal:</strong> {{ $sale->sale_date }}</p>
-                                    <p><strong>Total:</strong> Rp {{ number_format($sale->total_amount) }}</p>
+    @if (session('success'))
+        <div class="alert alert-success shadow-sm">
+            {{ session('success') }}
+        </div>
+    @endif
 
-                                    <hr>
+    @if (session('error'))
+        <div class="alert alert-danger shadow-sm">
+            {{ session('error') }}
+        </div>
+    @endif
 
-                                    <table class="table table-bordered">
-                                        <thead class="table-dark text-center">
+    <!-- ===================== -->
+    <!-- ✅ SEARCH (TAMBAHAN SAJA) -->
+    <!-- ===================== -->
+    <div class="mb-3">
+        <input type="text" id="search" class="form-control" placeholder="Cari nama customer atau resi...">
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Tanggal</th>
+                            <th>Customer & Resi</th>
+                            <th>Detail Produk</th>
+                            <th>Total</th>
+                            <th width="120px">Aksi</th>
+                        </tr>
+                    </thead>
+
+                    <!-- ===================== -->
+                    <!-- TABEL TIDAK DIUBAH -->
+                    <!-- ===================== -->
+                    <tbody id="salesTable">
+                        @forelse($sales as $i => $sale)
+                            <tr>
+
+                                <td class="fw-semibold">{{ $i + 1 }}</td>
+
+                                <td>
+                                    {{ \Carbon\Carbon::parse($sale->sale_date)->format('d M Y') }}
+                                    <br>
+                                    <small class="text-muted">
+                                        {{ \Carbon\Carbon::parse($sale->sale_date)->format('H:i') }}
+                                    </small>
+                                </td>
+
+                                <td>
+                                    <div class="customer-name">{{ $sale->customer_name ?? '-' }}</div>
+                                    <div class="resi">Resi: {{ $sale->tracking_number ?? '-' }}</div>
+                                </td>
+
+                                <td>
+                                    <table class="table nested-table mb-0">
+                                        <thead>
                                             <tr>
                                                 <th>Produk</th>
                                                 <th>Qty</th>
@@ -104,37 +148,61 @@
                                                 <th>Subtotal</th>
                                             </tr>
                                         </thead>
+
                                         <tbody>
-                                            @foreach($sale->details as $d)
-                                            <tr>
-                                                <td>{{ $d->product->name_product }}</td>
-                                                <td class="text-center">{{ $d->quantity }}</td>
-                                                <td>Rp {{ number_format($d->price) }}</td>
-                                                <td>Rp {{ number_format($d->subtotal) }}</td>
-                                            </tr>
+                                            @foreach ($sale->details as $d)
+                                                <tr>
+                                                    <td class="text-start">{{ $d->product->name_product }}</td>
+                                                    <td>{{ $d->quantity }}</td>
+                                                    <td>Rp {{ number_format($d->price, 0, ',', '.') }}</td>
+                                                    <td>Rp {{ number_format($d->subtotal, 0, ',', '.') }}</td>
+                                                </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
+                                </td>
 
-                                </div>
+                                <td class="total-text price-col">
+                                    Rp {{ number_format($sale->total_amount, 0, ',', '.') }}
+                                </td>
 
-                            </div>
-                        </div>
-                    </div>
+                                <td>
+                                    <form action="{{ route('sales.destroy', $sale->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-sm btn-danger">Hapus</button>
+                                    </form>
+                                </td>
 
-                    @empty
-                    <tr>
-                        <td colspan="5" class="text-center text-muted py-4">
-                            Belum ada data penjualan
-                        </td>
-                    </tr>
-                    @endforelse
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-4">
+                                    Belum ada data penjualan
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
 
-                </tbody>
-            </table>
+                </table>
+            </div>
+
         </div>
-
     </div>
-</div>
+
+    <!-- ===================== -->
+    <!-- AJAX SEARCH -->
+    <!-- ===================== -->
+    <script>
+        document.getElementById('search').addEventListener('keyup', function() {
+            let query = this.value;
+
+            fetch(`{{ route('sales.search') }}?q=${query}`)
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById('salesTable').innerHTML = html;
+                });
+        });
+    </script>
 
 @endsection

@@ -34,7 +34,7 @@
         div.classList.add("input-group", "mb-2");
 
         div.innerHTML = `
-            <input type="file" name="photos[]" class="form-control photo-input" accept="image/*">
+            <input type="file" name="photos[]" class="form-control photo-input" accept="image/*" onclick="handleClick(this)">
             <button type="button" class="btn btn-danger" onclick="removeInput(this)">🗑</button>
         `;
 
@@ -58,6 +58,18 @@
             input.blur();
         }
     }
+
+    const priceInput = document.getElementById('price');
+
+    priceInput.addEventListener('input', function(e) {
+        let value = this.value.replace(/\D/g, '');
+
+        if (value) {
+            this.value = new Intl.NumberFormat('id-ID').format(value);
+        } else {
+            this.value = '';
+        }
+    });
 </script>
 
 <body>
@@ -105,6 +117,11 @@
             <div class="mb-3">
                 <label class="form-label">Quantity</label>
                 <input type="number" name="qty" class="form-control" min="0" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Harga</label>
+                <input type="text" name="price" id="price" class="form-control" required>
             </div>
 
             <div class="mb-3">

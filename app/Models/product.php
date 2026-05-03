@@ -11,6 +11,7 @@ class Product extends Model
         'name_product',
         'brand',
         'qty',
+        'price',
         'description',
         'photo',
         'link'

@@ -136,28 +136,25 @@
 
             <!-- PENJUALAN -->
             <a href="javascript:void(0)" onclick="toggleDropdown(event)"
-                class="{{ request()->routeIs('sales.*') ? 'active' : '' }}">
+                class="{{ request()->routeIs('sales.*') || request()->routeIs('dashboard.stats') ? 'active' : '' }}">
 
                 <i class="bi bi-cart-check"></i>
                 Penjualan
                 <i class="bi bi-chevron-down ms-auto"></i>
             </a>
 
-            <div id="submenu" class="submenu {{ request()->routeIs('sales.*') ? 'show' : '' }}">
+            <div id="submenu"
+                class="submenu {{ request()->routeIs('sales.*') || request()->routeIs('dashboard.stats') ? 'show' : '' }}">
 
                 <a href="{{ route('sales.index') }}" class="{{ request()->routeIs('sales.index') ? 'active' : '' }}">
-                    <i class="bi bi-list"></i>
+                    <i class="bi bi-receipt"></i>
                     Data Penjualan
                 </a>
 
-                <a href="#">
+                <a href="{{ route('dashboard.stats') }}"
+                    class="{{ request()->routeIs('dashboard.stats') ? 'active' : '' }}">
                     <i class="bi bi-bar-chart"></i>
-                    Statistik
-                </a>
-
-                <a href="#">
-                    <i class="bi bi-receipt"></i>
-                    Detail Penjualan
+                    Statistik Penjualan
                 </a>
 
             </div>
@@ -167,7 +164,7 @@
         <!-- FOOTER -->
         <div class="sidebar-footer">
             <div>Inventory System</div>
-            <div>v1.0</div>
+            <div>v1.7.0</div>
         </div>
 
     </div>
@@ -184,10 +181,12 @@
                 <span class="navbar-brand mb-0 fw-semibold">
                     @if (request()->routeIs('products.*'))
                         Manajemen Produk
-                    @elseif(request()->routeIs('sales.*'))
+                    @elseif(request()->routeIs('sales.index'))
                         Manajemen Penjualan
+                    @elseif(request()->routeIs('dashboard.stats'))
+                        Statistik Penjualan
                     @else
-                        Dashboard
+                        Halaman Tidak Ada
                     @endif
                 </span>
 

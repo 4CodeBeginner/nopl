@@ -3,110 +3,131 @@
 @section('content')
     <style>
         .card {
-            border-radius: 12px;
+            border-radius: 14px;
             border: none;
+        }
+
+        .table {
+            border: 1px solid #dee2e6;
+        }
+
+        .table th,
+        .table td {
+            vertical-align: middle;
+            text-align: center;
+            border: 1px solid #dee2e6;
+        }
+
+        .table thead th {
+            background-color: #212529;
+            color: #fff;
+        }
+
+        .btn-sm {
+            border-radius: 8px;
+        }
+
+        .price-col {
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+
+        .customer-name {
+            font-weight: 600;
+        }
+
+        .resi {
+            font-size: 13px;
+            color: #888;
+        }
+
+        .nested-table {
+            border: 1px solid #dee2e6;
+            background: #fbfbfb;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .nested-table td {
+            font-size: 13px;
+            padding: 6px;
+            border: 1px solid #dee2e6;
+        }
+
+        .qty-text {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .total-text {
+            font-weight: 600;
+            color: #198754;
         }
     </style>
 
-    <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-semibold">Data Penjualan</h4>
 
-        <h4 class="mb-4">Tambah Penjualan</h4>
+        <a href="{{ route('sales.create') }}" class="btn btn-primary shadow-sm">
+            + Tambah Penjualan
+        </a>
+    </div>
 
-        <div class="card shadow-sm">
-            <div class="card-body">
+    @if (session('success'))
+        <div class="alert alert-success shadow-sm">
+            {{ session('success') }}
+        </div>
+    @endif
 
-                <form action="{{ route('sales.store') }}" method="POST">
-                    @csrf
+    @if (session('error'))
+        <div class="alert alert-danger shadow-sm">
+            {{ session('error') }}
+        </div>
+    @endif
 
-                    <div class="mb-3">
-                        <label class="form-label">Customer</label>
-                        <input type="text" name="customer_name" class="form-control" required>
-                    </div>
+    <!-- SEARCH (TAMBAHAN SAJA) -->
+    <div class="mb-3">
+        <input type="text" id="search" class="form-control" placeholder="Cari nama customer atau resi...">
+    </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">No Resi</label>
-                        <input type="text" name="tracking_number" class="form-control">
-                    </div>
+    <div class="card shadow-sm">
+        <div class="card-body">
 
-                    <hr>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
 
-                    <h5>Produk</h5>
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Tanggal</th>
+                            <th>Customer & Resi</th>
+                            <th>Detail Produk</th>
+                            <th>Total</th>
+                            <th width="120px">Aksi</th>
+                        </tr>
+                    </thead>
 
-                    <div id="wrapper">
-                        <div class="row mb-2 item">
-                            <div class="col">
-                                <select name="products[]" class="form-control">
-                                    @foreach ($products as $p)
-                                        <option value="{{ $p->id }}">{{ $p->name_product }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                    <tbody id="salesTable">
+                        @include('sales.partials.table', ['sales' => $sales])
+                    </tbody>
 
-                            <div class="col">
-                                <input type="number" name="qty[]" class="form-control" placeholder="Qty">
-                            </div>
-
-                            <div class="col">
-                                <input type="number" name="price[]" class="form-control" placeholder="Harga">
-                            </div>
-
-                            <div class="col-auto">
-                                <button type="button" class="btn btn-danger" onclick="removeRow(this)">🗑</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button type="button" class="btn btn-secondary mb-3" onclick="addRow()">
-                        + Tambah Produk
-                    </button>
-
-                    <br>
-
-                    <button class="btn btn-success">Simpan</button>
-                    <a href="{{ route('sales.index') }}" class="btn btn-secondary">Kembali</a>
-
-                </form>
-
+                </table>
             </div>
-        </div>
 
+        </div>
     </div>
 
+    <!-- AJAX SEARCH -->
     <script>
-        function addRow() {
-            let html = `
-    <div class="row mb-2 item">
-        <div class="col">
-            <select name="products[]" class="form-control">
-                @foreach ($products as $p)
-                <option value="{{ $p->id }}">{{ $p->name_product }}</option>
-                @endforeach
-            </select>
-        </div>
+        document.getElementById('search').addEventListener('keyup', function() {
+            let query = this.value;
 
-        <div class="col">
-            <input type="number" name="qty[]" class="form-control" placeholder="Qty">
-        </div>
-
-        <div class="col">
-            <input type="number" name="price[]" class="form-control" placeholder="Harga">
-        </div>
-
-        <div class="col-auto">
-            <button type="button" class="btn btn-danger" onclick="removeRow(this)">🗑</button>
-        </div>
-    </div>
-    `;
-            document.getElementById('wrapper').insertAdjacentHTML('beforeend', html);
-        }
-
-        function removeRow(btn) {
-            const items = document.querySelectorAll('.item');
-            if (items.length <= 1) {
-                alert('Minimal 1 produk');
-                return;
-            }
-            btn.closest('.item').remove();
-        }
+            fetch(`{{ route('sales.search') }}?q=${query}`)
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById('salesTable').innerHTML = html;
+                });
+        });
     </script>
 @endsection

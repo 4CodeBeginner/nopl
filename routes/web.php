@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\SaleController;
+use App\Http\Controllers\SalesController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -22,4 +22,6 @@ Route::get('/contact', function () {
 
 Route::resource('products', ProductController::class);
 
-Route::resource('sales', SaleController::class);
+Route::resource('sales', SalesController::class);
+Route::get('/sales-search', [SalesController::class, 'search'])->name('sales.search');
+Route::get('/dashboard-stats', [SalesController::class, 'stats'])->name('dashboard.stats');

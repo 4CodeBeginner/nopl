@@ -87,6 +87,13 @@
                             required>
                     </div>
 
+                    <!-- HARGA -->
+                    <div class="mb-3">
+                        <label class="form-label">Harga</label>
+                        <input type="text" id="price" name="price" class="form-control"
+                            value="{{ number_format($product->price, 0, ',', '.') }}" required>
+                    </div>
+
                     <div class="mb-3">
                         <label class="form-label">Deskripsi</label>
                         <textarea name="description" class="form-control" rows="3" required>{{ $product->description }}</textarea>
@@ -214,6 +221,17 @@
                 alert("Maksimal 3 foto");
                 input.blur();
             }
+        }
+
+        const priceInput = document.getElementById('price');
+
+        priceInput.addEventListener('input', function(e) {
+            let value = this.value.replace(/\D/g, '');
+            this.value = formatRupiah(value);
+        });
+
+        function formatRupiah(angka) {
+            return new Intl.NumberFormat('id-ID').format(angka);
         }
     </script>
 
