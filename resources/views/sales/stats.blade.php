@@ -65,7 +65,7 @@
         <!-- TOP PRODUCT -->
         <div class="col-md-6">
             <div class="card p-3">
-                <h5>Produk Terlaris</h5>
+                <h5>Top 5 Produk Terlaris</h5>
 
                 <table class="table table-sm mt-3">
                     <thead>
@@ -90,7 +90,7 @@
         <!-- GRAFIK PENJUALAN -->
         <div class="col-md-6">
             <div class="card p-3">
-                <h5>Penjualan 7 Hari Terakhir</h5>
+                <h5>Penjualan Tahun 2026</h5>
 
                 <canvas id="salesChart"></canvas>
             </div>
@@ -107,10 +107,10 @@
         new Chart(ctx, {
             type: 'line',
             data: {
-                labels: {!! json_encode($salesLast7Days->pluck('date')) !!},
+                labels: {!! json_encode($salesMonthly->pluck('month')) !!},
                 datasets: [{
-                    label: 'Penjualan',
-                    data: {!! json_encode($salesLast7Days->pluck('total')) !!},
+                    label: 'Penjualan per Bulan',
+                    data: {!! json_encode($salesMonthly->pluck('total')) !!},
                     borderWidth: 2
                 }]
             }

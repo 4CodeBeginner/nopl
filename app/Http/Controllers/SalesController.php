@@ -26,24 +26,20 @@ class SalesController extends Controller
                 $query->where('customer_name', 'like', "%$q%")
                     ->orWhere('tracking_number', 'like', "%$q%");
             })
-            ->orderBy('sale_date', 'desc')
+            ->latest()
             ->get();
 
-        return view('sales.partials.rows', compact('sales'));
+        return view('sales.partials.rows', compact('sales'))->render();
     }
 
     public function stats()
     {
-        // Total omzet
         $totalOmzet = DB::table('sales')->sum('total_amount');
 
-        // Total transaksi
         $totalTransaksi = DB::table('sales')->count();
 
-        // Total item terjual (qty)
         $totalQty = DB::table('sale_details')->sum('quantity');
 
-        // Produk paling laris
         $topProducts = DB::table('sale_details')
             ->join('products', 'sale_details.product_id', '=', 'products.id')
             ->select(
@@ -55,15 +51,13 @@ class SalesController extends Controller
             ->limit(5)
             ->get();
 
-        // Penjualan 7 hari terakhir
-        $salesLast7Days = DB::table('sales')
+        $salesMonthly = DB::table('sales')
             ->select(
-                DB::raw('DATE(sale_date) as date'),
+                DB::raw("DATE_FORMAT(sale_date, '%b %Y') as month"),
                 DB::raw('SUM(total_amount) as total')
             )
-            ->where('sale_date', '>=', Carbon::now()->subDays(7))
-            ->groupBy(DB::raw('DATE(sale_date)'))
-            ->orderBy('date')
+            ->groupBy(DB::raw("DATE_FORMAT(sale_date, '%b %Y')"))
+            ->orderBy(DB::raw("MIN(sale_date)"))
             ->get();
 
         return view('sales.stats', compact(
@@ -71,7 +65,7 @@ class SalesController extends Controller
             'totalTransaksi',
             'totalQty',
             'topProducts',
-            'salesLast7Days'
+            'salesMonthly'
         ));
     }
 
@@ -84,74 +78,66 @@ class SalesController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'customer_name' => 'required',
-            'products.*'    => 'required|exists:products,id',
-            'quantity.*'    => 'required|integer|min:1',
-            'price.*'       => 'required|numeric|min:0',
+            'customer_name' => 'required|string|max:100',
+            'tracking_number' => 'required|string|max:100|unique:sales,tracking_number',
+            'product_id' => 'required|array|min:1',
+            'product_id.*' => 'required|exists:products,id',
+            'qty' => 'required|array|min:1',
+            'qty.*' => 'required|integer|min:1'
+        ], [
+            'tracking_number.unique' => 'Nomor resi sudah digunakan'
         ]);
 
         DB::beginTransaction();
 
         try {
 
-            // 🔥 Simpan ke tabel sales
-            $sale = Sale::create([
+            $total = 0;
+
+            $sale = \App\Models\Sale::create([
+                'sale_date' => now(),
                 'customer_name' => $request->customer_name,
                 'tracking_number' => $request->tracking_number,
                 'total_amount' => 0
             ]);
 
-            $total = 0;
+            foreach ($request->product_id as $i => $productId) {
 
-            foreach ($request->products as $i => $productId) {
-
-                $qty = $request->quantity[$i];
-                $price = $request->price[$i];
-                $subtotal = $qty * $price;
+                $qty = $request->qty[$i];
 
                 $product = Product::findOrFail($productId);
 
-                // ❌ CEK STOK
                 if ($product->qty < $qty) {
-                    DB::rollBack();
-                    return redirect()->back()
-                        ->withInput()
-                        ->with('error', 'Stok produk "' . $product->name_product . '" tidak mencukupi');
+                    throw new \Exception("Stok produk {$product->name_product} tidak mencukupi");
                 }
 
-                // ✅ KURANGI STOK
-                $product->qty -= $qty;
-                $product->save();
+                $subtotal = $product->price * $qty;
 
-                // ✅ SIMPAN DETAIL
                 SaleDetail::create([
                     'sale_id' => $sale->id,
                     'product_id' => $productId,
                     'quantity' => $qty,
-                    'price' => $price,
+                    'price' => $product->price,
                     'subtotal' => $subtotal
                 ]);
+
+                $product->decrement('qty', $qty);
 
                 $total += $subtotal;
             }
 
-            // ✅ UPDATE TOTAL
             $sale->update([
                 'total_amount' => $total
             ]);
 
             DB::commit();
 
-            // ✅ REDIRECT KE INDEX (yang kamu kasih)
-            return redirect()->route('sales.index')
-                ->with('success', 'Penjualan berhasil disimpan');
+            return redirect()->route('sales.index')->with('success', 'Penjualan berhasil ditambahkan');
         } catch (\Exception $e) {
 
             DB::rollBack();
 
-            return redirect()->back()
-                ->withInput()
-                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -162,12 +148,11 @@ class SalesController extends Controller
         try {
             $sale = Sale::with('details')->findOrFail($id);
 
-            // 🔄 KEMBALIKAN STOK
             foreach ($sale->details as $detail) {
                 $product = Product::find($detail->product_id);
+
                 if ($product) {
-                    $product->qty += $detail->quantity;
-                    $product->save();
+                    $product->increment('qty', $detail->quantity);
                 }
             }
 

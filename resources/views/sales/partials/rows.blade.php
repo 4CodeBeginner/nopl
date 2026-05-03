@@ -11,52 +11,62 @@
             </small>
         </td>
 
-        <td>
-            <div class="customer-name">{{ $sale->customer_name ?? '-' }}</div>
-            <div class="resi">Resi: {{ $sale->tracking_number ?? '-' }}</div>
+        <!-- CUSTOMER -->
+        <td class="customer-name">
+            {{ $sale->customer_name ?? '-' }}
         </td>
 
-        <td>
-            <table class="table nested-table mb-0">
-                <thead>
-                    <tr>
-                        <th>Produk</th>
-                        <th>Qty</th>
-                        <th>Harga</th>
-                        <th>Subtotal</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    @foreach ($sale->details as $d)
-                        <tr>
-                            <td class="text-start">{{ $d->product->name_product }}</td>
-                            <td>{{ $d->quantity }}</td>
-                            <td>Rp {{ number_format($d->price, 0, ',', '.') }}</td>
-                            <td>Rp {{ number_format($d->subtotal, 0, ',', '.') }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+        <!-- RESI -->
+        <td class="resi">
+            {{ $sale->tracking_number ?? '-' }}
         </td>
 
-        <td class="total-text price-col">
+        <!-- TOTAL -->
+        <td class="total-col">
             Rp {{ number_format($sale->total_amount, 0, ',', '.') }}
         </td>
 
+        <!-- DETAIL -->
+        <td>
+            <button class="btn btn-sm toggle-detail d-flex align-items-center gap-2 mx-auto"
+                onclick='showDetail({
+                    tanggal: "{{ \Carbon\Carbon::parse($sale->sale_date)->format('d M Y H:i') }}",
+                    customer: "{{ $sale->customer_name ?? '-' }}",
+                    resi: "{{ $sale->tracking_number ?? '-' }}",
+                    total: "Rp {{ number_format($sale->total_amount, 0, ',', '.') }}",
+                    details: [
+                        @foreach ($sale->details as $d)
+                        {
+                            produk: "{{ $d->product->name_product }}",
+                            qty: "{{ $d->quantity }}",
+                            harga: "Rp {{ number_format($d->price, 0, ',', '.') }}",
+                            subtotal: "Rp {{ number_format($d->subtotal, 0, ',', '.') }}"
+                        }, @endforeach
+                    ]
+                })'>
+
+                <i class="bi bi-eye"></i>
+                <span>Detail</span>
+
+            </button>
+        </td>
+
+        <!-- AKSI -->
         <td>
             <form action="{{ route('sales.destroy', $sale->id) }}" method="POST">
                 @csrf
                 @method('DELETE')
-                <button class="btn btn-sm btn-danger">Hapus</button>
+                <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete(this)">
+                    Hapus
+                </button>
             </form>
         </td>
 
     </tr>
 @empty
     <tr>
-        <td colspan="6" class="text-center text-muted py-4">
-            Tidak ada data
+        <td colspan="7" class="text-center text-muted py-4">
+            Belum ada data penjualan
         </td>
     </tr>
 @endforelse
