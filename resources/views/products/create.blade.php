@@ -4,29 +4,31 @@
 <head>
     <title>Tambah Produk</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </head>
 
 <script>
+    function getTotalInputs() {
+        return document.querySelectorAll('.photo-input').length;
+    }
+
+    function getFilledInputs() {
+        return Array.from(document.querySelectorAll('.photo-input'))
+            .filter(input => input.value !== '').length;
+    }
+
     document.addEventListener("change", function(e) {
         if (e.target.classList.contains("photo-input")) {
 
-            const wrapper = document.getElementById('photo-wrapper');
-            const inputs = wrapper.querySelectorAll('.photo-input');
-
-            const allFilled = Array.from(inputs).every(input => input.value !== '');
-
-            if (allFilled && inputs.length < 3) {
+            if (getFilledInputs() === getTotalInputs() && getTotalInputs() < 3) {
                 addInput();
             }
         }
     });
 
     function addInput() {
-        const wrapper = document.getElementById('photo-wrapper');
-        const total = wrapper.querySelectorAll('.photo-input').length;
+        if (getTotalInputs() >= 3) return;
 
-        if (total >= 3) return;
+        const wrapper = document.getElementById('photo-wrapper');
 
         const div = document.createElement("div");
         div.classList.add("input-group", "mb-2");
@@ -40,8 +42,7 @@
     }
 
     function removeInput(button) {
-        const wrapper = document.getElementById('photo-wrapper');
-        const inputs = wrapper.querySelectorAll('.input-group');
+        const inputs = document.querySelectorAll('.input-group');
 
         if (inputs.length <= 1) {
             alert("Minimal 1 foto");
@@ -49,6 +50,13 @@
         }
 
         button.parentElement.remove();
+    }
+
+    function handleClick(input) {
+        if (getTotalInputs() >= 3 && input.value === '') {
+            alert("Maksimal 3 foto");
+            input.blur();
+        }
     }
 </script>
 
@@ -93,6 +101,12 @@
                 </select>
             </div>
 
+            <!-- QTY -->
+            <div class="mb-3">
+                <label class="form-label">Quantity</label>
+                <input type="number" name="qty" class="form-control" min="0" required>
+            </div>
+
             <div class="mb-3">
                 <label class="form-label">Deskripsi</label>
                 <textarea name="description" class="form-control" rows="3" required></textarea>
@@ -108,8 +122,8 @@
 
                 <div id="photo-wrapper">
                     <div class="input-group mb-2">
-                        <input type="file" name="photos[]" class="form-control photo-input" accept="image/*"
-                            required>
+                        <input type="file" name="photos[]" class="form-control photo-input" accept="image/*" required
+                            onclick="handleClick(this)">
                         <button type="button" class="btn btn-danger" onclick="removeInput(this)">🗑</button>
                     </div>
                 </div>

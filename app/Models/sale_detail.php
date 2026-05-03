@@ -4,7 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Sale_detail extends Model
+class SaleDetail extends Model
 {
-    //
+    public $timestamps = false;
+
+    protected $fillable = [
+        'sale_id',
+        'product_id',
+        'quantity',
+        'price',
+        'subtotal'
+    ];
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

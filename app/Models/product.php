@@ -10,8 +10,9 @@ class Product extends Model
         'id_product',
         'name_product',
         'brand',
+        'qty',
         'description',
-        'link',
-        'photo'
+        'photo',
+        'link'
     ];
 }

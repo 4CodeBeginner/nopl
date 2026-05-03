@@ -9,7 +9,7 @@
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Bootstrap Icons -->
+    <!-- Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Font -->
@@ -27,7 +27,7 @@
             position: fixed;
             background: #212529;
             color: white;
-            transition: all 0.3s ease;
+            transition: 0.3s;
             display: flex;
             flex-direction: column;
         }
@@ -52,18 +52,18 @@
             color: white;
         }
 
-        .sidebar .logo {
+        .logo {
             text-align: center;
             padding: 20px 10px;
             border-bottom: 1px solid #343a40;
         }
 
-        .sidebar .logo img {
-            width: 80px;
+        .logo img {
+            width: 70px;
             border-radius: 10px;
         }
 
-        .sidebar .menu {
+        .menu {
             flex: 1;
         }
 
@@ -92,7 +92,7 @@
         .main-content {
             margin-left: 250px;
             padding: 20px;
-            transition: all 0.3s ease;
+            transition: 0.3s;
         }
 
         .main-content.full {
@@ -116,45 +116,55 @@
 
 <body>
 
-    <!-- Sidebar -->
+    <!-- SIDEBAR -->
     <div id="sidebar" class="sidebar">
 
-        <!-- Logo -->
+        <!-- LOGO -->
         <div class="logo">
             <img src="{{ asset('img/emstoys.png') }}">
             <div class="mt-2 fw-semibold">NOPL DIECAST</div>
         </div>
 
-        <!-- Menu -->
+        <!-- MENU -->
         <div class="menu">
 
+            <!-- PRODUK -->
             <a href="{{ route('products.index') }}" class="{{ request()->routeIs('products.*') ? 'active' : '' }}">
                 <i class="bi bi-box-seam"></i>
                 Produk
             </a>
 
-            <!-- Penjualan dropdown -->
-            <a href="javascript:void(0)" onclick="toggleDropdown()"
-                class="{{ request()->is('sales*') ? 'active' : '' }}">
+            <!-- PENJUALAN -->
+            <a href="javascript:void(0)" onclick="toggleDropdown(event)"
+                class="{{ request()->routeIs('sales.*') ? 'active' : '' }}">
+
                 <i class="bi bi-cart-check"></i>
                 Penjualan
                 <i class="bi bi-chevron-down ms-auto"></i>
             </a>
 
-            <div id="submenu" class="submenu {{ request()->is('sales*') ? 'show' : '' }}">
+            <div id="submenu" class="submenu {{ request()->routeIs('sales.*') ? 'show' : '' }}">
+
+                <a href="{{ route('sales.index') }}" class="{{ request()->routeIs('sales.index') ? 'active' : '' }}">
+                    <i class="bi bi-list"></i>
+                    Data Penjualan
+                </a>
+
                 <a href="#">
                     <i class="bi bi-bar-chart"></i>
                     Statistik
                 </a>
+
                 <a href="#">
                     <i class="bi bi-receipt"></i>
-                    Penjualan Detail
+                    Detail Penjualan
                 </a>
+
             </div>
 
         </div>
 
-        <!-- Footer -->
+        <!-- FOOTER -->
         <div class="sidebar-footer">
             <div>Inventory System</div>
             <div>v1.0</div>
@@ -162,21 +172,19 @@
 
     </div>
 
-    <!-- Main -->
+    <!-- MAIN -->
     <div id="main" class="main-content">
 
-        <!-- Navbar -->
+        <!-- NAVBAR -->
         <nav class="navbar navbar-light navbar-custom mb-4">
             <div class="d-flex align-items-center">
 
-                <button class="toggle-btn me-3" onclick="toggleSidebar()">
-                    ☰
-                </button>
+                <button class="toggle-btn me-3" onclick="toggleSidebar()">☰</button>
 
                 <span class="navbar-brand mb-0 fw-semibold">
                     @if (request()->routeIs('products.*'))
                         Manajemen Produk
-                    @elseif(request()->is('sales*'))
+                    @elseif(request()->routeIs('sales.*'))
                         Manajemen Penjualan
                     @else
                         Dashboard
@@ -190,14 +198,15 @@
 
     </div>
 
-    <!-- Script -->
+    <!-- SCRIPT -->
     <script>
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('hide');
             document.getElementById('main').classList.toggle('full');
         }
 
-        function toggleDropdown() {
+        function toggleDropdown(e) {
+            e.stopPropagation();
             document.getElementById('submenu').classList.toggle('show');
         }
     </script>
