@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class ProductController extends Controller
         return view('products.index', compact('products'));
     }
 
-    public function indexUser()
+       public function indexUser()
     {
         $products = Product::all();
         return view('pages.product', compact('products'));
@@ -99,17 +100,58 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
+        $product = Product::findOrFail($id);
+
         $request->validate([
-            'id_product' => 'required',
-            'name_product' => 'required',
-            'brand' => 'required',
-            'description' => 'required',
-            'photo' => 'required',
-            'link' => 'required|url',
+            'name_product' => 'required|string|max:255',
+            'brand'        => 'required|in:hotw,minigt,poprace,tomica,mbx',
+            'description'  => 'required|string',
+            'link'         => 'required|url',
+            'photos.*'     => 'image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $product = Product::findOrFail($id);
-        $product->update($request->all());
+        $oldPhotos = explode(',', $product->photo);
+        $keptPhotos = $request->old_photos ?? [];
+
+        foreach ($oldPhotos as $photo) {
+            if (!in_array($photo, $keptPhotos)) {
+                $path = public_path($photo);
+
+                if (File::exists($path)) {
+                    File::delete($path);
+                }
+            }
+        }
+
+        $paths = $keptPhotos;
+
+        if ($request->hasFile('photos')) {
+            $index = count($paths) + 1;
+
+            foreach ($request->file('photos') as $file) {
+                if (count($paths) >= 3) break;
+
+                $ext = $file->getClientOriginalExtension();
+                $filename = $product->id_product . '(' . $index . ')-' . time() . '.' . $ext;
+
+                $file->move(public_path('produk'), $filename);
+                $paths[] = 'produk/' . $filename;
+
+                $index++;
+            }
+        }
+
+        if (count($paths) < 1) {
+            return back()->withErrors('Minimal 1 foto');
+        }
+
+        $product->update([
+            'name_product' => $request->name_product,
+            'brand'        => $request->brand,
+            'description'  => $request->description,
+            'link'         => $request->link,
+            'photo'        => implode(',', $paths)
+        ]);
 
         return redirect()->route('products.index')->with('success', 'Produk berhasil diupdate');
     }
@@ -117,6 +159,17 @@ class ProductController extends Controller
     public function destroy($id)
     {
         $product = Product::findOrFail($id);
+
+        $photos = explode(',', $product->photo);
+
+        foreach ($photos as $photo) {
+            $path = public_path($photo);
+
+            if (File::exists($path)) {
+                File::delete($path);
+            }
+        }
+
         $product->delete();
 
         return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus');

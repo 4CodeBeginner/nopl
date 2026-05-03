@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product</title>
 </head>
+
 <body>
 
-    @extends('layout.app')
+    @extends('layouts.guest')
     @section('content')
-
-
     <div class="product-container">
 
         <div class="product-grid">
@@ -29,7 +29,9 @@
                     />
                     @endforeach
 </div>
+    @endsection
 
 
 </body>
+
 </html>
