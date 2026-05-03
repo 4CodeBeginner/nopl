@@ -21,7 +21,6 @@
             background: #f5f6fa;
         }
 
-        /* SIDEBAR */
         .sidebar {
             width: 250px;
             height: 100vh;
@@ -68,7 +67,6 @@
             flex: 1;
         }
 
-        /* dropdown */
         .submenu {
             display: none;
             background: #2c3034;
@@ -83,7 +81,6 @@
             display: block;
         }
 
-        /* footer sidebar */
         .sidebar-footer {
             padding: 15px;
             font-size: 12px;
@@ -92,7 +89,6 @@
             border-top: 1px solid #343a40;
         }
 
-        /* MAIN */
         .main-content {
             margin-left: 250px;
             padding: 20px;
@@ -103,7 +99,6 @@
             margin-left: 0;
         }
 
-        /* NAVBAR */
         .navbar-custom {
             background: white;
             border-bottom: 1px solid #ddd;

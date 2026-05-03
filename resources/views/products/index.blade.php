@@ -25,15 +25,13 @@
                 border-radius: 8px;
             }
 
-            /* WRAPPER FOTO */
             .carousel-wrapper {
                 background: #f8f9fa;
                 border-radius: 12px;
-                padding: 10px;
+                padding: 12px;
                 text-align: center;
             }
 
-            /* GAMBAR FIX (ANTI STRETCH) */
             .modal-img {
                 max-height: 220px;
                 width: 100%;
@@ -41,26 +39,45 @@
                 border-radius: 10px;
             }
 
-            /* CONTROL PANAH */
             .carousel-control-prev,
             .carousel-control-next {
-                width: 40px;
-                height: 40px;
+                width: 38px;
+                height: 38px;
                 top: 50%;
                 transform: translateY(-50%);
-                background: rgba(0, 0, 0, 0.3);
+                background: rgba(0, 0, 0, 0.25);
                 border-radius: 50%;
+                transition: 0.2s;
             }
 
             .carousel-control-prev:hover,
             .carousel-control-next:hover {
-                background: rgba(0, 0, 0, 0.6);
+                background: rgba(0, 0, 0, 0.55);
             }
 
             .carousel-control-prev-icon,
             .carousel-control-next-icon {
-                width: 18px;
-                height: 18px;
+                width: 16px;
+                height: 16px;
+            }
+
+            .desc-box {
+                display: -webkit-box;
+                -webkit-line-clamp: 4;
+                -webkit-box-orient: vertical;
+                overflow-y: auto;
+                line-height: 1.5;
+                max-height: calc(1.5em * 4);
+                padding-right: 6px;
+            }
+
+            .desc-box::-webkit-scrollbar {
+                width: 5px;
+            }
+
+            .desc-box::-webkit-scrollbar-thumb {
+                background: #bbb;
+                border-radius: 10px;
             }
         </style>
 
@@ -86,7 +103,6 @@
                                 <th>No</th>
                                 <th>ID Product</th>
                                 <th>Nama</th>
-                                <th>Brand</th>
                                 <th>Link</th>
                                 <th width="220px">Aksi</th>
                             </tr>
@@ -102,12 +118,6 @@
 
                                     <td class="fw-semibold">
                                         {{ $product->name_product }}
-                                    </td>
-
-                                    <td class="text-center">
-                                        <span class="badge bg-secondary text-uppercase">
-                                            {{ $product->brand }}
-                                        </span>
                                     </td>
 
                                     <td class="text-center">
@@ -133,8 +143,9 @@
                                             class="d-inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="btn btn-sm btn-danger shadow-sm"
-                                                onclick="return confirm('Yakin hapus?')">
+
+                                            <button type="submit" class="btn btn-sm btn-danger shadow-sm"
+                                                onclick="return confirm('Yakin hapus produk ini?')">
                                                 Hapus
                                             </button>
                                         </form>
@@ -191,12 +202,12 @@
 
                                                 <!-- DETAIL -->
                                                 <p><strong>ID:</strong> {{ $product->id_product }}</p>
-                                                <p><strong>Brand:</strong> {{ strtoupper($product->brand) }}</p>
 
                                                 <p class="mb-1"><strong>Deskripsi:</strong></p>
-                                                <p class="text-muted">
-                                                    {{ $product->description }}
-                                                </p>
+
+                                                <div class="desc-box">
+                                                    {!! nl2br(e($product->description)) !!}
+                                                </div>
 
                                             </div>
 

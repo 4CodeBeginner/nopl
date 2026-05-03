@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->integer('id_product')->nullable(); // opsional kalau masih mau pakai
+            $table->integer('id_product')->nullable();
             $table->string('name_product');
             $table->enum('brand', ['hotw', 'minigt', 'poprace', 'tomica', 'mbx']);
             $table->text('description')->nullable();
