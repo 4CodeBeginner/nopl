@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @extends('layouts.app')
 
 @section('content')
@@ -214,3 +215,5 @@
     </script>
 
 @endsection
+=======
+>>>>>>> 405d6a141283845c111649c68d94e2087a0b4e4e
