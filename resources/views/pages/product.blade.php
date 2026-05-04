@@ -24,7 +24,7 @@
                     :image="$firstPhoto"
                     :name="$product->name_product"
                     :brand="$product->brand"
-                    :price="0"
+                    :price="$product->price"
 
                     />
                     @endforeach

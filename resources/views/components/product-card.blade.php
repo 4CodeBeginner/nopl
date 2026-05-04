@@ -10,7 +10,7 @@
     <div class="card-body">
         <h3 class="product-name">{{ $name }}</h3>
         <p class="product-brand">{{ $brand }}</p>
-        <p class="product-price">Rp </p>
+        <p class="product-price">Rp {{ number_format($price,0, ',', '.')}} </p>
     </div>
 
 
