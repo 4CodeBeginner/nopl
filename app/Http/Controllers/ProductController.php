@@ -167,18 +167,10 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
 
-        $photos = explode(',', $product->photo);
-
-        foreach ($photos as $photo) {
-            $path = public_path($photo);
-
-            if (File::exists($path)) {
-                File::delete($path);
-            }
-        }
-
         $product->delete();
 
-        return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus');
+        return redirect()
+            ->route('products.index')
+            ->with('success', 'Produk berhasil dihapus.');
     }
 }
