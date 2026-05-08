@@ -12,156 +12,196 @@
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+
     <style>
         body {
-            background: linear-gradient(135deg, #0d6efd, #6610f2);
+            font-family: 'Poppins', sans-serif;
             min-height: 100vh;
+            background: linear-gradient(135deg,
+                    #0d47a1,
+                    #1976d2,
+                    #43a047,
+                    #fdd835);
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .login-card {
             width: 100%;
-            max-width: 420px;
+            max-width: 400px;
             border: none;
-            border-radius: 20px;
+            border-radius: 18px;
             overflow: hidden;
+            background: #fff;
         }
 
         .login-header {
-            background: #0d6efd;
-            color: white;
-            padding: 30px;
             text-align: center;
+            padding: 30px 25px 20px;
+        }
+
+        .login-header img {
+            width: 120px;
+            margin-bottom: 15px;
+        }
+
+        .login-header h3 {
+            font-weight: 700;
+            color: #212529;
+            margin-bottom: 5px;
+        }
+
+        .login-header p {
+            color: #6c757d;
+            font-size: 14px;
+            margin-bottom: 0;
+        }
+
+        .card-body {
+            padding: 25px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .input-group-text {
+            background: #f1f3f5;
+            border-radius: 10px 0 0 10px;
         }
 
         .form-control {
-            height: 50px;
-            border-radius: 12px;
+            height: 48px;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+            border-color: #1976d2;
         }
 
         .btn-login {
-            height: 50px;
-            border-radius: 12px;
+            height: 48px;
+            border-radius: 10px;
             font-weight: 600;
+            background: #1976d2;
+            border: none;
+            transition: 0.2s;
         }
 
-        .icon-box {
-            width: 80px;
-            height: 80px;
-            background: rgba(255, 255, 255, 0.2);
-            margin: auto;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 35px;
+        .btn-login:hover {
+            background: #0d47a1;
+        }
+
+        .alert {
+            font-size: 14px;
+            border-radius: 10px;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="container">
-        <div class="row justify-content-center align-items-center min-vh-100">
+    <div class="card shadow-lg login-card">
 
-            <div class="col-md-5">
+        <!-- HEADER -->
+        <div class="login-header">
 
-                <div class="card shadow-lg login-card">
+            <img src="{{ asset('img/emstoys.png') }}" alt="Logo">
 
-                    <div class="login-header">
-                        <div class="icon-box mb-3">
-                            <i class="bi bi-person-lock"></i>
-                        </div>
+            <h3>Admin Login</h3>
 
-                        <h3 class="fw-bold mb-1">Admin Login</h3>
-                        <p class="mb-0">
-                            Silakan login untuk mengakses dashboard
-                        </p>
-                    </div>
+            <p>
+                Silakan login untuk mengakses dashboard
+            </p>
 
-                    <div class="card-body p-4">
+        </div>
 
-                        {{-- Alert Error --}}
-                        @if (session('error'))
-                            <div class="alert alert-danger alert-dismissible fade show">
-                                {{ session('error') }}
+        <!-- BODY -->
+        <div class="card-body">
 
-                                <button type="button" class="btn-close" data-bs-dismiss="alert">
-                                </button>
+            {{-- ERROR --}}
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show">
+                    {{ session('error') }}
+
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
+            <form method="POST" action="/login">
+
+                @csrf
+
+                <!-- EMAIL -->
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Email
+                    </label>
+
+                    <div class="input-group">
+
+                        <span class="input-group-text">
+                            <i class="bi bi-envelope"></i>
+                        </span>
+
+                        <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
+                            placeholder="Masukkan email" value="{{ old('email') }}" required>
+
+                        @error('email')
+                            <div class="invalid-feedback">
+                                {{ $message }}
                             </div>
-                        @endif
-
-                        <form method="POST" action="/login">
-
-                            @csrf
-
-                            {{-- Email --}}
-                            <div class="mb-3">
-
-                                <label class="form-label fw-semibold">
-                                    Email
-                                </label>
-
-                                <div class="input-group">
-
-                                    <span class="input-group-text">
-                                        <i class="bi bi-envelope"></i>
-                                    </span>
-
-                                    <input type="email" name="email"
-                                        class="form-control @error('email') is-invalid @enderror"
-                                        placeholder="Masukkan email" value="{{ old('email') }}" required>
-
-                                    @error('email')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-
-                                </div>
-                            </div>
-
-                            {{-- Password --}}
-                            <div class="mb-4">
-
-                                <label class="form-label fw-semibold">
-                                    Password
-                                </label>
-
-                                <div class="input-group">
-
-                                    <span class="input-group-text">
-                                        <i class="bi bi-lock"></i>
-                                    </span>
-
-                                    <input type="password" name="password"
-                                        class="form-control @error('password') is-invalid @enderror"
-                                        placeholder="Masukkan password" required>
-
-                                    @error('password')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-
-                                </div>
-                            </div>
-
-                            {{-- Button --}}
-                            <button type="submit" class="btn btn-primary w-100 btn-login">
-
-                                <i class="bi bi-box-arrow-in-right"></i>
-                                Login
-                            </button>
-
-                        </form>
+                        @enderror
 
                     </div>
 
                 </div>
 
-            </div>
+                <!-- PASSWORD -->
+                <div class="mb-4">
+
+                    <label class="form-label">
+                        Password
+                    </label>
+
+                    <div class="input-group">
+
+                        <span class="input-group-text">
+                            <i class="bi bi-lock"></i>
+                        </span>
+
+                        <input type="password" name="password"
+                            class="form-control @error('password') is-invalid @enderror" placeholder="Masukkan password"
+                            required>
+
+                        @error('password')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+
+                    </div>
+
+                </div>
+
+                <!-- BUTTON -->
+                <button type="submit" class="btn btn-primary w-100 btn-login">
+
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    Login
+
+                </button>
+
+            </form>
 
         </div>
+
     </div>
 
     <!-- Bootstrap JS -->
