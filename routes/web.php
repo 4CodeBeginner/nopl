@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SalesController;
 use Illuminate\Support\Facades\Route;
@@ -20,8 +21,26 @@ Route::get('/contact', function () {
     return view('pages.contact');
 });
 
-Route::resource('products', ProductController::class);
+/*
+|--------------------------------------------------------------------------
+| LOGIN
+|--------------------------------------------------------------------------
+*/
 
-Route::resource('sales', SalesController::class);
-Route::get('/sales-search', [SalesController::class, 'search'])->name('sales.search');
-Route::get('/dashboard-stats', [SalesController::class, 'stats'])->name('dashboard.stats');
+Route::get('/login', [AuthController::class, 'loginForm']);
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::post('/logout', [AuthController::class, 'logout']);
+
+Route::middleware(['admin'])->group(function () {
+
+    Route::resource('products', ProductController::class);
+
+    Route::resource('sales', SalesController::class);
+
+    Route::get('/sales-search', [SalesController::class, 'search'])
+        ->name('sales.search');
+
+    Route::get('/dashboard-stats', [SalesController::class, 'stats'])
+        ->name('dashboard.stats');
+});

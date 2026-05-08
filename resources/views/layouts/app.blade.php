@@ -81,14 +81,6 @@
             display: block;
         }
 
-        .sidebar-footer {
-            padding: 15px;
-            font-size: 12px;
-            text-align: center;
-            color: #6c757d;
-            border-top: 1px solid #343a40;
-        }
-
         .main-content {
             margin-left: 250px;
             padding: 20px;
@@ -110,6 +102,12 @@
             border: none;
             background: transparent;
             font-size: 20px;
+        }
+
+        .sidebar form button {
+            border-radius: 10px;
+            height: 40px;
+            font-weight: 500;
         }
     </style>
 </head>
@@ -161,10 +159,21 @@
 
         </div>
 
-        <!-- FOOTER -->
-        <div class="sidebar-footer">
-            <div>Inventory System</div>
-            <div>v1.7.0</div>
+        <!-- LOGOUT -->
+        <div class="px-3 pb-3">
+
+            <form action="/logout" method="POST">
+                @csrf
+
+                <button type="submit"
+                    class="btn btn-danger w-100 d-flex align-items-center justify-content-center gap-2">
+
+                    <i class="bi bi-box-arrow-right"></i>
+                    Logout
+
+                </button>
+            </form>
+
         </div>
 
     </div>
@@ -179,8 +188,11 @@
                 <button class="toggle-btn me-3" onclick="toggleSidebar()">☰</button>
 
                 <span class="navbar-brand mb-0 fw-semibold">
+
                     @if (request()->routeIs('products.*'))
                         Manajemen Produk
+                    @elseif(request()->routeIs('sales.create'))
+                        Tambah Penjualan
                     @elseif(request()->routeIs('sales.index'))
                         Manajemen Penjualan
                     @elseif(request()->routeIs('dashboard.stats'))
@@ -188,6 +200,7 @@
                     @else
                         Halaman Tidak Ada
                     @endif
+
                 </span>
 
             </div>
