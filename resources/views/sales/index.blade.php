@@ -152,13 +152,13 @@
                                             total: "Rp {{ number_format($sale->total_amount, 0, ',', '.') }}",
                                             details: [
                                                 @foreach ($sale->details as $d)
-                                                    {
-                                                        produk: "{{ $d->product->name_product }}",
-                                                        qty: "{{ $d->quantity }}",
-                                                        harga: "Rp {{ number_format($d->price, 0, ',', '.') }}",
-                                                        subtotal: "Rp {{ number_format($d->subtotal, 0, ',', '.') }}"
-                                                    }, @endforeach
-                                            ]
+                                                        {
+                                                            produk: "{{ $d->product->name_product ?? 'Produk telah dihapus' }}",
+                                                            qty: "{{ $d->quantity }}",
+                                                            harga: "Rp {{ number_format($d->price, 0, ',', '.') }}",
+                                                            subtotal: "Rp {{ number_format($d->subtotal, 0, ',', '.') }}"
+                                                        }, @endforeach
+                                                ]
                                         })'>
 
                                         <i class="bi bi-eye"></i>

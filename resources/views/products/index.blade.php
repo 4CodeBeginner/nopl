@@ -6,6 +6,9 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- SWEETALERT -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     @extends('layouts.app')
 
     @section('content')
@@ -115,6 +118,20 @@
                 background: #bbb;
                 border-radius: 10px;
             }
+
+            .swal-title-sm {
+                font-size: 22px !important;
+            }
+
+            .swal-text-sm {
+                font-size: 15px !important;
+            }
+
+            .swal-btn-sm {
+                font-size: 14px !important;
+                padding: 8px 18px !important;
+                border-radius: 8px !important;
+            }
         </style>
 
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -201,8 +218,8 @@
                                             @csrf
                                             @method('DELETE')
 
-                                            <button type="submit" class="btn btn-sm btn-danger shadow-sm"
-                                                onclick="return confirm('Yakin hapus produk ini?')">
+                                            <button type="button" class="btn btn-sm btn-danger shadow-sm"
+                                                onclick="confirmDelete(this)">
                                                 Hapus
                                             </button>
                                         </form>
@@ -316,6 +333,35 @@
     @endsection
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function confirmDelete(button) {
+
+            Swal.fire({
+                title: 'Yakin ingin menghapus?',
+                text: "Produk akan dipindahkan ke data terhapus.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, hapus',
+                cancelButtonText: 'Batal',
+                reverseButtons: true,
+                customClass: {
+                    title: 'swal-title-sm',
+                    htmlContainer: 'swal-text-sm',
+                    confirmButton: 'swal-btn-sm',
+                    cancelButton: 'swal-btn-sm'
+                }
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+                    button.closest('form').submit();
+                }
+
+            });
+        }
+    </script>
 
     </body>
 

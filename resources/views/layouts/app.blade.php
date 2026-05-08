@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>NOPL DIECAST</title>
 
     <!-- Bootstrap -->
@@ -185,7 +188,11 @@
         <nav class="navbar navbar-light navbar-custom mb-4">
             <div class="d-flex align-items-center">
 
-                <button class="toggle-btn me-3" onclick="toggleSidebar()">☰</button>
+                <button class="toggle-btn me-3" onclick="toggleSidebar()" title="Buka / Tutup Sidebar">
+
+                    <i id="sidebarIcon" class="bi bi-layout-sidebar-inset fs-4"></i>
+
+                </button>
 
                 <span class="navbar-brand mb-0 fw-semibold">
 
@@ -213,15 +220,50 @@
     <!-- SCRIPT -->
     <script>
         function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('hide');
-            document.getElementById('main').classList.toggle('full');
+
+            const sidebar = document.getElementById('sidebar');
+            const main = document.getElementById('main');
+            const icon = document.getElementById('sidebarIcon');
+
+            sidebar.classList.toggle('hide');
+            main.classList.toggle('full');
+
+            if (sidebar.classList.contains('hide')) {
+
+                icon.classList.remove('bi-layout-sidebar-inset');
+                icon.classList.add('bi-layout-sidebar');
+
+            } else {
+
+                icon.classList.remove('bi-layout-sidebar');
+                icon.classList.add('bi-layout-sidebar-inset');
+
+            }
         }
 
-        function toggleDropdown(e) {
-            e.stopPropagation();
-            document.getElementById('submenu').classList.toggle('show');
+        function toggleDropdown(event) {
+
+            event.stopPropagation();
+
+            document.getElementById('submenu')
+                .classList.toggle('show');
         }
+
+        history.pushState(null, null, location.href);
+
+        window.onpopstate = function() {
+            history.go(1);
+        };
+
+        window.addEventListener('pageshow', function(event) {
+
+            if (event.persisted) {
+                window.location.reload();
+            }
+
+        });
     </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
