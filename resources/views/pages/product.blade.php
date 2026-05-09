@@ -24,7 +24,7 @@
                     :name="$product->name_product"
                     :brand="$product->brand"
                     :price="$product->price"
-
+                    :marketplaceLink="$product->link"
                     />
                     @endforeach
 </div>

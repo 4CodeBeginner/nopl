@@ -4,10 +4,16 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SalesController;
 use Illuminate\Support\Facades\Route;
+use App\Models\Product;
+
 
 
 Route::get('/', function () {
-    return view('pages.home');
+
+    $products = Product::latest()->take(4)->get();
+
+    return view('pages.home', compact('products'));
+
 });
 
 Route::get('/product', [ProductController::class, 'indexUser']);
