@@ -7,23 +7,27 @@
     <div class="featured-carousel">
   
     <div class="featured-card">
-        <img src="/produk/MGT-0003-080526(2).png" alt="">
+        <img src="/img/carousel1.png" alt="">
     </div>
 
     <div class="featured-card">
-        <img src="/produk/MGT-0003-080526(2).png" alt="">
+        <img src="/img/carousel2.png" alt="">
     </div>
 
     <div class="featured-card">
-        <img src="/produk/HW-0002-260426(3)-1777785283.jpg" alt="">
+        <img src="/img/carousel3.png" alt="">
     </div>
 
     <div class="featured-card">
-        <img src="/produk/HW-0002-260426(3)-1777785283.jpg" alt="">
+        <img src="/img/carousel4.png" alt="">
     </div>
 
-      <div class="featured-card">
-        <img src="/produk/MGT-0003-080526(2).png" alt="">
+    <div class="featured-card">
+        <img src="/img/carousel5.png" alt="">
+    </div>
+
+    <div class="featured-card">
+        <img src="/img/carousel6.png" alt="">
     </div>
 </div>
     
