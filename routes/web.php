@@ -10,7 +10,7 @@ use App\Models\Product;
 
 Route::get('/', function () {
 
-    $products = Product::latest()->take(4)->get();
+    $products = Product::latest()->take(12)->get();
 
     return view('pages.home', compact('products'));
 

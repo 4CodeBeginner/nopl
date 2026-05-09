@@ -4,6 +4,8 @@ $brandName = match($brand){
     'minigt' => 'Mini GT',
     'poprace' => 'Pop Race',
     'tarmac' => 'Tarmac Works',
+    'tomica' => 'Tomica',
+    'mbx' => 'MatchBox',
     default => $brand
 };
 @endphp
