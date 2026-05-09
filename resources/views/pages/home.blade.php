@@ -25,10 +25,6 @@
     <div class="featured-card">
         <img src="/img/carousel5.png" alt="">
     </div>
-
-    <div class="featured-card">
-        <img src="/img/carousel6.png" alt="">
-    </div>
 </div>
     
 <div class="product-grid">
@@ -48,7 +44,3 @@
 </div>
 </div>
 @endsection
-
-
-
-
