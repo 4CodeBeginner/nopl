@@ -19,7 +19,7 @@
             <img src="/img/HotWheelsLogo.png" alt="">
         </a>
 
-        <a href="/product?brand=TARMAS">
+        <a href="/product?brand=TARMAC">
            <img src="/img/Tarmac.png" class="tarmac-logo">
         </a>
 
