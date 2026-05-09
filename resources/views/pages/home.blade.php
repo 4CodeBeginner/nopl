@@ -7,10 +7,6 @@
     <div class="featured-carousel">
   
     <div class="featured-card">
-        <img src="/produk/HW-0002-260426(1).png" alt="">
-    </div>
-
-    <div class="featured-card">
         <img src="/produk/MGT-0003-080526(2).png" alt="">
     </div>
 
@@ -19,7 +15,11 @@
     </div>
 
     <div class="featured-card">
-        <img src="/produk/MGT-0003-080526(2).png" alt="">
+        <img src="/produk/HW-0002-260426(3)-1777785283.jpg" alt="">
+    </div>
+
+    <div class="featured-card">
+        <img src="/produk/HW-0002-260426(3)-1777785283.jpg" alt="">
     </div>
 
       <div class="featured-card">

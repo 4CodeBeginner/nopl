@@ -134,19 +134,13 @@ body{
 }
 
 .featured-card{
-    min-width: 320px;
-    height: 220px;
-
+    min-width: 260px;
+    height: 160px;
     background: white;
-
     border-radius: 20px;
-
     overflow: hidden;
-
     flex-shrink: 0;
-
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-
     transition: 0.3s ease;
 }
 
@@ -157,9 +151,7 @@ body{
 .featured-card img{
     width: 100%;
     height: 100%;
-
     object-fit: contain;
-
     display: block;
 }
 .home-section{
