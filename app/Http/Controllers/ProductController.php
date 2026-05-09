@@ -16,10 +16,19 @@ class ProductController extends Controller
         $products = Product::all();
         return view('products.index', compact('products'));
     }
-    public function indexUser()
+   
+    public function indexUser(Request $request)
     {
-        $products = Product::all();
-        return view('pages.product', compact('products'));
+    $query = Product::query();
+
+    if($request->brand){
+
+        $query->where('brand', $request->brand);
+
+    }
+    $products = $query->get();
+
+    return view('pages.product', compact('products'));
     }
 
     public function create()

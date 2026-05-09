@@ -12,6 +12,35 @@
     @extends('layouts.guest')
     @section('content')
     <div class="product-container">
+
+        <form method="GET" class="filter-form">
+
+    <select name="brand" onchange="this.form.submit()">
+
+        <option value="">Semua Brand</option>
+
+        <option value="HOTW" 
+            {{ request('brand') == 'HOTW' ? 'selected' : '' }}>
+            HOTWHEELS
+        </option>
+
+        <option value="TARMAS"
+            {{ request('brand') == 'TARMAS' ? 'selected' : '' }}>
+            TARMAS
+        </option>
+
+        <option value="POPRACE"
+            {{ request('brand') == 'POPRACE' ? 'selected' : '' }}>
+            POPRACE
+        </option>
+         <option value="MINIGT"
+            {{ request('brand') == 'MINIGT' ? 'selected' : '' }}>
+            MINIGT
+        </option>
+
+    </select>
+
+</form>
         <div class="product-grid">
             @foreach ($products as $product)
                 @php
