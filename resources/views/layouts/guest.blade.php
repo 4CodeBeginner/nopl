@@ -15,7 +15,14 @@
     <div class="container mx-auto mt-4">
         @yield('content')
     </div>
+    <script>
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const navMenu = document.getElementById('nav-menu');
 
+    hamburgerBtn.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+    });
+    </script>
 </body>
 
 </html>

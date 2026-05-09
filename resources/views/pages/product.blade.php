@@ -11,8 +11,55 @@
 
     @extends('layouts.guest')
     @section('content')
-        <h1> product </h1>
+    <div class="product-container">
+
+        <form method="GET" class="filter-form">
+
+    <select name="brand" onchange="this.form.submit()">
+
+        <option value="">Semua Brand</option>
+
+        <option value="HOTW" 
+            {{ request('brand') == 'HOTW' ? 'selected' : '' }}>
+            HOTWHEELS
+        </option>
+
+        <option value="TARMAS"
+            {{ request('brand') == 'TARMAS' ? 'selected' : '' }}>
+            TARMAS
+        </option>
+
+        <option value="POPRACE"
+            {{ request('brand') == 'POPRACE' ? 'selected' : '' }}>
+            POPRACE
+        </option>
+         <option value="MINIGT"
+            {{ request('brand') == 'MINIGT' ? 'selected' : '' }}>
+            MINIGT
+        </option>
+
+    </select>
+
+</form>
+        <div class="product-grid">
+            @foreach ($products as $product)
+                @php
+                    $photos = explode(',', $product->photo);
+                    $firstPhoto = $photos[0] ?? null;
+                @endphp
+
+                <x-product-card
+                    :image="$firstPhoto"
+                    :name="$product->name_product"
+                    :brand="$product->brand"
+                    :price="$product->price"
+                    :marketplaceLink="$product->link"
+                    />
+                    @endforeach
+</div>
+</div>
     @endsection
+
 
 </body>
 
