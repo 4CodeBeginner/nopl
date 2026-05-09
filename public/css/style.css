@@ -218,24 +218,24 @@ body{
     min-width: 170px;
 }
 
+/* filter-mobile */
 .filter-form{
-    margin-bottom: 30px;
+    margin: 20px;
+    margin-top: 10px;
 }
 
 .filter-form select{
     padding: 10px 16px;
-
     border-radius: 10px;
-
     border: 1px solid #ddd;
-
     font-size: 15px;
-
     font-weight: 500;
-
     background: white;
-
     cursor: pointer;
+}
+
+.filter-form select:focus{
+    border-color: black;
 }
 /* ---- */
 
@@ -247,15 +247,14 @@ body{
 
 .dropdown-menu{
     position: absolute;
-    top: 120%;
+    top: 105%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%);
+    width: 90px;
     background: white;
-    border-radius: 14px;
-    min-width: 220px;
-    box-shadow:
-        0 12px 30px rgba(0,0,0,0.15);
-    padding: 10px 0;
+    border-radius: 12px;
+    padding: 2px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
     opacity: 0;
     visibility: hidden;
     transition: 0.25s ease;
@@ -265,17 +264,18 @@ body{
 .nav-dropdown:hover .dropdown-menu{
     opacity: 1;
     visibility: visible;
+    top: 110%;
 }
 
 .dropdown-menu a{
     display: flex;
-    align-items: center;
     justify-content: center;
-    padding: 14px 20px;
-    text-decoration: none;
-    color: black;
-    font-weight: 700;
-    transition: 0.2s ease;
+    align-items: center;
+    padding: 2px;
+    width: 100%;
+    border-radius: 8px;
+    min-height: 42px;
+
 }
 
 .dropdown-menu a:hover{
@@ -284,6 +284,12 @@ body{
 
 .nav-dropdown > a{
     position: relative;
+    align-items: center;
+    display: flex;
+    text-decoration: none;
+    font-weight: bold;
+    color: black;
+    padding: 10px;
 }
 
 .nav-dropdown > a::after{
@@ -301,14 +307,79 @@ body{
 .nav-dropdown:hover > a::after{
     opacity: 1;
 }
+.dropdown-menu img{
+
+    object-fit: contain;
+    
+    width: 100px;
+    height: 36px;
+    display: flex;
+    flex-shrink: 0;
+}
+
+
+@media (max-width: 768px) {
+    .nav-left{
+        display: flex;
+        justify-content: space-between;
+        /* flex-direction: column; */
+        align-items: center;
+        width: 100%;
+        gap: 30px;
+    }
+    .nav-menu{
+        gap: 12px;
+        width: 100%;
+        white-space: nowrap;
+    }
+    .nav-menu a{
+        margin: 0;
+        font-size: 14px;
+    }
+    .product-grid{
+        grid-template-columns: repeat(2,1fr);
+    }
+     .card-footer{
+        display: flex;
+        justify-content: center;
+    }
+    .market-btn{
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 600px){
+    .product-card{
+        padding: 8px;
+    }
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+    .product-name{
+        font-size: 13px;
+    }
+    .card-image{
+        height: 140px;
+    }
+       .about-card { padding: 32px 24px; }
+        .features-grid { grid-template-columns: 1fr; }
+        .section-title { font-size: 22px; }
+    .section-wrapper{
+        padding: 20px 12px;
+    }
+}
 
 @media (max-width: 480px){
-
+    
     .nav-left{
         position: relative;
         justify-content: space-between;
         align-items: center;
         width: 100%;
+    }
+    *{
+    box-sizing: border-box;
     }
 
     .hamburger{
@@ -341,73 +412,19 @@ body{
         padding: 12px 20px;
         font-size: 14px;
     }
-}
-
-@media (max-width: 600px){
     .product-card{
-        padding: 8px;
-    }
-    .product-grid {
-        grid-template-columns: 1fr;
-    }
-    .product-name{
-        font-size: 13px;
+        padding: 12px;
+        border-radius: 18px;
     }
     .card-image{
-        height: 140px;
-    }
-       .about-card { padding: 32px 24px; }
-        .features-grid { grid-template-columns: 1fr; }
-        .section-title { font-size: 22px; }
-    .section-wrapper{
-        padding: 20px 12px;
-    }
-}
-@media (max-width: 768px) {
-    
-    .nav-left{
-        display: flex;
-        justify-content: space-between;
-        /* flex-direction: column; */
-        align-items: center;
-        width: 100%;
-        gap: 30px;
-    }
-
-    .nav-menu{
-        gap: 12px;
-        width: 100%;
-        white-space: nowrap;
-    }
-
-    .nav-menu a{
-        margin: 0;
-        font-size: 14px;
-    }
-
-    .product-grid{
-        grid-template-columns: repeat(2,1fr);
-    }
-     .card-footer{
-        display: flex;
-
-        justify-content: center;
-    }
-
-    .market-btn{
-        width: 100%;
-
-        text-align: center;
-    }
-
-    .dropdown-menu{
-        display: none;
+        height: 130px;
     }
 }
 
 @media (max-width: 480px) {
     .product-grid {
         grid-template-columns: 1fr;
+        padding: 0 16px;
     }
      .hamburger {
         display: block;
@@ -419,6 +436,9 @@ body{
 
     .nav-menu.active {
         display: flex;
+    }
+    .dropdown-menu{
+        display: none;
     }
 }
 @media (max-width: 425px) {

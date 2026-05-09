@@ -16,19 +16,19 @@
     <div class="dropdown-menu">
 
         <a href="/product?brand=HOTW">
-            HOTWHEELS
+            <img src="/img/HotWheelsLogo.png" alt="">
         </a>
 
         <a href="/product?brand=TARMAS">
-            TARMAS
+           <img src="/img/Tarmac.png" class="tarmac-logo">
         </a>
 
         <a href="/product?brand=POPRACE">
-            POPRACE
+           <img src="/img/PopRace.png" alt="">
         </a>
 
         <a href="/product?brand=MINIGT">
-            MINI GT
+             <img src="/img/MiniGT.png" alt="">
         </a>
 
        
