@@ -8,7 +8,8 @@
 
         <div class="nav-menu" id="nav-menu">
             <a href="/">Home</a>
-            <div class="nav-dropdown">
+
+    <div class="nav-dropdown">
 
     <a href="/product">Product</a>
 
@@ -18,13 +19,19 @@
             HOTWHEELS
         </a>
 
+        <a href="/product?brand=TARMAS">
+            TARMAS
+        </a>
+
+        <a href="/product?brand=POPRACE">
+            POPRACE
+        </a>
+
         <a href="/product?brand=MINIGT">
             MINI GT
         </a>
 
-        <a href="/product?brand=KAIDO">
-            KAIDO
-        </a>
+       
 
     </div>
 
