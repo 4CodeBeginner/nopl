@@ -66,6 +66,7 @@
 
 <style>
     .about-wrapper {
+        margin-top:-10px;
     min-height: calc(100vh - 70px);
     display: flex;
     align-items: center;

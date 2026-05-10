@@ -24,9 +24,9 @@
             HOTWHEELS
         </option>
 
-        <option value="TARMAS"
-            {{ request('brand') == 'TARMAS' ? 'selected' : '' }}>
-            TARMAS
+        <option value="TOMICA"
+            {{ request('brand') == 'TOMICA' ? 'selected' : '' }}>
+            TOMICA
         </option>
 
         <option value="POPRACE"

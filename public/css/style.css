@@ -3,6 +3,11 @@ body{
     font-family: 'Poppins', sans-serif;
     background: white;
 }
+
+/* navbar */
+.logo{
+    height: 45px;
+}
 .navbar{
     display: flex;
     align-items: center;
@@ -19,24 +24,41 @@ body{
     gap: 80px;
 }
 
+/* nav menu */
 .nav-menu{
+    position:relative;
     display: flex;
     align-items: center;
     gap: 50px;
 }
 .nav-menu a{
-    /* margin-right: 50px; */
     text-decoration: none;
     color: black;
     font-size: 16px;
     font-family: 'Poppins';
     font-weight: bold;
-
 }
-.logo{
-    height: 45px;
+.nav-link{
+    position: relative;
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    padding: 10px 0;
+    z-index: 2;
+}
+.nav-indicator{
+    position: absolute;
+    bottom: -8px;
+    height: 4px;
+    border-radius: 999px;
+    transition:
+        left 0.35s ease,
+        width 0.35s ease,
+        background-color 0.35s ease;
+    z-index: 1;
 }
 
+/* product */
 .product-card {
     background: white;
     border-radius: 14px;
@@ -47,6 +69,7 @@ body{
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12),
                 0 4px 10px rgba(0,0,0,0.08);
     border: solid 0.2px gray;
+    padding-bottom: 14px;
 } 
 
 
@@ -70,9 +93,6 @@ body{
 .card-body {
     margin-top: 8px;
     
-}
-.card-footer{
-    margin-top: auto;
 }
 
 .product-name {
@@ -109,14 +129,8 @@ body{
 
 .product-grid {
     display: grid;
-        /* grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); */
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
-}
-.product-card{
-    display: flex;
-    flex-direction: column;
-    padding-bottom: 14px;
 }
 
 .product-container{
@@ -140,18 +154,9 @@ body{
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 22px;
-    margin-top: -12px;
-    /* 
-    display: flex;
-    gap: 24px;
-    overflow-x: auto;
-    padding: 2px 12px 12px;
-    padding: 4px 0 12px;
-    scrollbar-width: none;  */
     margin-bottom: 18px;
     margin-top: -16px;
 }
-
 
 .featured-carousel::-webkit-scrollbar{
     display: none;
@@ -159,26 +164,11 @@ body{
 
 .featured-card{
     height: 300px;
-
     background: white;
-
     border-radius: 18px;
-
     overflow: hidden;
-
-    box-shadow:
-        0 4px 12px rgba(0,0,0,0.08);
-
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
     transition: 0.25s ease;
-
-    /* min-width: 260px;
-    height: 300px;
-    background: white;
-    border-radius: 8px;
-    overflow: hidden;
-    flex-shrink: 0;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    transition: 0.3s ease; */
 }
 
 .featured-card:hover{
@@ -198,24 +188,17 @@ body{
 /* link */
 .market-btn{
     display: inline-block;
-
     margin-top: 12px;
-
-    padding: 10px 14px;
-
+    padding: 12px 24px;
     background: black;
-
     color: white;
-
     text-decoration: none;
-
-    border-radius: 10px;
-
+    border-radius: 12px;
     font-size: 14px;
-
     font-weight: 600;
-
     transition: 0.3s ease;
+    text-align: center;
+    min-width: 170px;
 }
 
 .market-btn:hover{
@@ -228,25 +211,6 @@ body{
     padding-bottom: 10px;
     display: flex;
     justify-content: center;
-}
-.market-btn{
-    display: inline-block;
-
-    padding: 12px 24px;
-
-    background: black;
-
-    color: white;
-
-    text-decoration: none;
-
-    border-radius: 12px;
-
-    font-weight: 600;
-
-    text-align: center;
-
-    min-width: 170px;
 }
 
 /* filter-mobile */
@@ -268,7 +232,7 @@ body{
 .filter-form select:focus{
     border-color: black;
 }
-/* ---- */
+
 
 
 /* dropdown */
@@ -278,7 +242,7 @@ body{
 
 .dropdown-menu{
     position: absolute;
-    top: 105%;
+    top: calc(100% + 30px);
     left: 50%;
     transform: translateX(-45%);
     width: 90px;
@@ -295,7 +259,7 @@ body{
 .nav-dropdown:hover .dropdown-menu{
     opacity: 1;
     visibility: visible;
-    top: 110%;
+    top: calc(100% + 20px);
 }
 
 .dropdown-menu a{
@@ -323,21 +287,6 @@ body{
     padding: 10px;
 }
 
-.nav-dropdown > a::after{
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -8px;
-    width: 100%;
-    height: 4px;
-    border-radius: 10px;
-    opacity: 0;
-    transition: 0.2s ease;
-}
-
-.nav-dropdown:hover > a::after{
-    opacity: 1;
-}
 .dropdown-menu img{
 
     object-fit: contain;
@@ -397,6 +346,9 @@ body{
 }
 
 @media (max-width: 600px){
+      .nav-indicator{
+        display:none;
+    }
     .product-card{
         padding: 8px;
     }
@@ -455,6 +407,7 @@ body{
     }
 
     .nav-menu a{
+        font-weight: bold;
         margin: 0;
         padding: 12px 20px;
         font-size: 14px;
@@ -466,28 +419,15 @@ body{
     .card-image{
         height: 130px;
     }
-}
-
-@media (max-width: 480px) {
-    .product-grid {
+     .product-grid {
         grid-template-columns: 1fr;
         padding: 0 16px;
-    }
-     .hamburger {
-        display: block;
-    }
-
-    .nav-menu {
-        display: none;
-    }
-
-    .nav-menu.active {
-        display: flex;
     }
     .dropdown-menu{
         display: none;
     }
 }
+
 @media (max-width: 425px) {
 
     .nav-menu {
