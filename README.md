@@ -57,3 +57,16 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Pencarian Produk
+
+Pencarian teks tersedia dari kolom pencarian di navbar. Untuk Visual Search, unggah gambar produk (JPG, PNG, atau WEBP, maksimal 5 MB); gambar dikirim oleh server ke Gemini untuk mengenali merek/model, lalu kata kuncinya dicocokkan dengan katalog produk.
+
+Atur API key di file `.env`:
+
+```env
+GEMINI_API_KEY=your-gemini-api-key
+GEMINI_MODEL=gemini-3.5-flash-lite
+```
+
+`GEMINI_MODEL` bersifat opsional dan default-nya `gemini-3.5-flash-lite`. API key hanya digunakan di server dan tidak boleh dimasukkan ke kode frontend.

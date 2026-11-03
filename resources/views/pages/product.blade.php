@@ -13,6 +13,13 @@
     @section('content')
     <div class="product-container">
 
+        @if (isset($searchTerm))
+            <p class="search-summary">
+                {{ ($isVisualSearch ?? false) ? 'Hasil Visual Search untuk:' : 'Hasil pencarian untuk:' }}
+                <strong>{{ $searchTerm }}</strong>
+            </p>
+        @endif
+
         <form method="GET" class="filter-form">
 
     <select name="brand" onchange="this.form.submit()">
@@ -20,21 +27,21 @@
         <option value="">Semua Brand</option>
 
         <option value="HOTW" 
-            {{ request('brand') == 'HOTW' ? 'selected' : '' }}>
+            {{ strtolower(request('brand', '')) == 'hotw' ? 'selected' : '' }}>
             HOTWHEELS
         </option>
 
         <option value="TOMICA"
-            {{ request('brand') == 'TOMICA' ? 'selected' : '' }}>
+            {{ strtolower(request('brand', '')) == 'tomica' ? 'selected' : '' }}>
             TOMICA
         </option>
 
         <option value="POPRACE"
-            {{ request('brand') == 'POPRACE' ? 'selected' : '' }}>
+            {{ strtolower(request('brand', '')) == 'poprace' ? 'selected' : '' }}>
             POPRACE
         </option>
          <option value="MINIGT"
-            {{ request('brand') == 'MINIGT' ? 'selected' : '' }}>
+            {{ strtolower(request('brand', '')) == 'minigt' ? 'selected' : '' }}>
             MINIGT
         </option>
 
@@ -42,20 +49,18 @@
 
 </form>
         <div class="product-grid">
-            @foreach ($products as $product)
-                @php
-                    $photos = explode(',', $product->photo);
-                    $firstPhoto = $photos[0] ?? null;
-                @endphp
-
+    @forelse ($products as $product)
                 <x-product-card
-                    :image="$firstPhoto"
+                    :image="$product->photo"
                     :name="$product->name_product"
                     :brand="$product->brand"
                     :price="$product->price"
+                    :description="$product->description"
                     :marketplaceLink="$product->link"
                     />
-                    @endforeach
+    @empty
+        <p class="search-empty">Produk tidak ditemukan. Coba kata kunci atau gambar lain.</p>
+    @endforelse
 </div>
 </div>
     @endsection
