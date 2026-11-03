@@ -8,6 +8,8 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Carbon\Carbon;
+use App\Services\GeminiVisualSearch;
+use App\Services\VisualSearchException;
 
 class ProductController extends Controller
 {
@@ -19,16 +21,83 @@ class ProductController extends Controller
    
     public function indexUser(Request $request)
     {
-    $query = Product::query();
+        $query = Product::query();
 
-    if($request->brand){
+        if ($request->filled('brand')) {
+            $query->where('brand', strtolower($request->string('brand')->toString()));
+        }
 
-        $query->where('brand', $request->brand);
+        $products = $query->get();
 
+        return view('pages.product', compact('products'));
     }
-    $products = $query->get();
 
-    return view('pages.product', compact('products'));
+    public function search(Request $request, GeminiVisualSearch $visualSearch)
+    {
+        if ($request->method() === 'GET' && !$request->has('q') && !$request->hasFile('image')) {
+            return redirect('/product');
+        }
+
+        $validated = $request->validate([
+            'q' => ['nullable', 'string', 'max:255'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            'brand' => ['nullable', 'string', 'in:HOTW,TOMICA,POPRACE,MINIGT,MBX,hotw,tomica,poprace,minigt,mbx'],
+        ]);
+
+        $searchTerm = trim((string) ($validated['q'] ?? ''));
+        $isVisualSearch = $request->hasFile('image');
+
+        if ($isVisualSearch) {
+            try {
+                $searchTerm = $visualSearch->describe($request->file('image'));
+            } catch (VisualSearchException $exception) {
+                report($exception);
+
+                return back()->withInput()->withErrors([
+                    'search' => $exception->getMessage(),
+                ]);
+            }
+        } elseif ($searchTerm === '') {
+            return back()->withErrors([
+                'search' => 'Masukkan kata kunci atau pilih gambar untuk mencari produk.',
+            ]);
+        }
+
+        $terms = collect(preg_split('/[^\pL\pN]+/u', Str::lower($searchTerm)))
+            ->filter(fn (string $term) => mb_strlen($term) >= 2)
+            ->unique()
+            ->values();
+
+        if ($terms->isEmpty()) {
+            $terms->push($searchTerm);
+        }
+
+        $query = Product::query()
+            ->when(
+                !empty($validated['brand']),
+                fn ($query) => $query->where('brand', strtolower($validated['brand']))
+            )
+            ->where(function ($query) use ($terms) {
+                foreach ($terms as $term) {
+                    $query->orWhere('name_product', 'like', '%' . $term . '%')
+                        ->orWhere('brand', 'like', '%' . $term . '%')
+                        ->orWhere('description', 'like', '%' . $term . '%');
+                }
+            });
+
+        $products = $query->get()
+            ->sortByDesc(function (Product $product) use ($terms) {
+                $productText = Str::lower(implode(' ', [
+                    $product->name_product,
+                    $product->brand,
+                    $product->description,
+                ]));
+
+                return $terms->filter(fn (string $term) => Str::contains($productText, $term))->count();
+            })
+            ->values();
+
+        return view('pages.product', compact('products', 'searchTerm', 'isVisualSearch'));
     }
 
     public function create()

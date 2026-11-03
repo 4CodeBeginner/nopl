@@ -16,7 +16,10 @@ Route::get('/', function () {
 
 });
 
-Route::get('/product', [ProductController::class, 'indexUser']);
+Route::get('/product', [ProductController::class, 'indexUser'])->name('product.index');
+Route::match(['GET', 'POST'], '/product/search', [ProductController::class, 'search'])
+    ->middleware('throttle:10,1')
+    ->name('product.search');
 
 Route::get('/about', function () {
     return view('pages.about');
