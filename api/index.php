@@ -1,13 +1,17 @@
 <?php
 
-// Arahkan semua request ke public/index.php Laravel
+// Pastikan lokasi autoloader & file entry Laravel valid
+$publicPath = __DIR__ . '/../public';
+
 $uri = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 
-if ($uri !== '/' && file_exists(__DIR__ . '/../public' . $uri)) {
+// Layani file statis jika ada di direktori public
+if ($uri !== '/' && file_exists($publicPath . $uri)) {
     return false;
 }
 
-$_SERVER['SCRIPT_FILENAME'] = __DIR__ . '/../public/index.php';
+// Set script environment agar Laravel mengenali entry point
+$_SERVER['SCRIPT_FILENAME'] = $publicPath . '/index.php';
 $_SERVER['SCRIPT_NAME']     = '/index.php';
 
-require __DIR__ . '/../public/index.php';
+require $publicPath . '/index.php';
